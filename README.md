@@ -1,5 +1,5 @@
 # SignInProject
-Basic framework for app sign in. Includes storing passwords as hash in DB. 
+Basic framework for app sign in. Allows for user registration and sign in to protected pages. Also Includes storing passwords as hash in DB and checking user input values. 
 
 Table in DB is called "users" with 4 fields:
 fullname
