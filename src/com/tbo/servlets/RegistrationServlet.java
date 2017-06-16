@@ -50,6 +50,8 @@ public class RegistrationServlet extends HttpServlet {
  */
         if(CheckUsernameDao.validate(n)){  
         	out.print("<p style=\"color:red\">Sorry username already exists.</p>"); 
+			RequestDispatcher rd=request.getRequestDispatcher("register.jsp");  
+            rd.include(request,response);
         }  
         else{  
             RegisterDao.insert(n,f,hash, salt);
