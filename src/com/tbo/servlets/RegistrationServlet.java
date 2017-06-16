@@ -17,6 +17,7 @@ import com.tbo.dao.RegisterDao;
 import com.tbo.dao.CheckUsernameDao;
 
 import com.tbo.password_management.*;
+import com.tbo.utils.StringUtils;
 
 /**
  * Servlet implementation class RegistrationServlet
@@ -37,9 +38,13 @@ public class RegistrationServlet extends HttpServlet {
         String f=request.getParameter("fullname");
         String p=request.getParameter("userpass"); 
         
+        boolean XSSDetected = false;
+        XSSDetected = (XSSDetected) || (StringUtils.containsXSS(n));
+        XSSDetected = (XSSDetected) || (StringUtils.containsXSS(f));
+        XSSDetected = (XSSDetected) || (StringUtils.containsXSS(p));
+        
         sh = PasswordStorage.computePassword(p);                
         
-
         String salt = sh.getsaltObject();
         String hash = sh.getpasswordObject();
         
@@ -50,9 +55,14 @@ public class RegistrationServlet extends HttpServlet {
  */
         if(CheckUsernameDao.validate(n)){  
         	out.print("<p style=\"color:red\">Sorry username already exists.</p>"); 
-			RequestDispatcher rd=request.getRequestDispatcher("register.jsp");  
+        	RequestDispatcher rd=request.getRequestDispatcher("register.jsp");
             rd.include(request,response);
-        }  
+        } 
+        else if(XSSDetected){
+        	out.print("<p style=\"color:red\">Due to the possibility of XSS, do not use the following characters: &, <,>,\",/</p>"); 
+        	RequestDispatcher rd=request.getRequestDispatcher("register.jsp");  
+            rd.include(request,response);        
+        }
         else{  
             RegisterDao.insert(n,f,hash, salt);
             out.print("<p style=\"color:red\">User has been created.</p>");

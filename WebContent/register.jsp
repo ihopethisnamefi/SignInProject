@@ -13,19 +13,19 @@
             <table>
                 <tr>
                     <td>User ID</td>
-                    <td><input type="text" name="username" required="required" /></td>
+                    <td><input type="text" name="username" required="required" onKeyPress="checkEnter()" /></td>
                 </tr>
                 <tr>
                     <td>Full Name</td>
-                    <td><input type="text" name="fullname" required="required" /></td>
+                    <td><input type="text" name="fullname" required="required" onKeyPress="checkEnter()" /></td>
                 </tr>
                 <tr>
                     <td>Password</td>
-                    <td><input type="password" name="userpass" required="required" /></td>
+                    <td><input type="password" name="userpass" required="required" onKeyPress="checkEnter()" /></td>
                 </tr>
                 <tr>
                     <td>Confirm Password</td>
-                    <td><input type="password" name="confirmpass" required="required" /></td>
+                    <td><input type="password" name="confirmpass" required="required" onKeyPress="checkEnter()" /></td>
                 </tr>
                 <tr>
                     <td><input type="button" onClick="selectedValues()" value="Register" /></td>
@@ -44,25 +44,76 @@ function selectedValues(){
 	var p2 = document.forms["RegisterForm"].elements["confirmpass"].value;
 	
 	if( (uname == null) || (uname =="") ){
-		alert("EmailAddress cannot be null");
+		alert("Username cannot be null");
 		document.forms["RegisterForm"].elements["username"].focus();
 		return;
 		
 	}
+	/*
+	if ((uname.indexof('/')>-1) || (uname.indexof('>')>-1) || (uname.indexof('<')>-1) || (uname.indexof('&')>-1) || (uname.indexof('\"')>-1) ){
+		alert("Invalid character in username");
+		document.forms["RegisterForm"].elements["username"].focus();
+		return;
+	}
+	*/
 	if( (fname == null) || (fname =="") ){
 		alert("Full name cannot be null");
-		document.forms["RegisterForm"].elements["fname"].focus();
+		document.forms["RegisterForm"].elements["fullname"].focus();
 		return;
 		
 	}
+	/*
+	if ((fname.indexof('/')>-1) || (fname.indexof('>')>-1) || (fname.indexof('<')>-1) || (fname.indexof('&')>-1) || (fname.indexof('\"')>-1) ){
+		alert("Invalid character in fullname");
+		document.forms["RegisterForm"].elements["fullname"].focus();
+		return;
+	}
+	*/
+	
+	if( (p1 == null) || (p1 =="") ){
+		alert("Password cannot be null");
+		document.forms["RegisterForm"].elements["userpass"].focus();
+		return;
+		
+	}
+	/*
+	if ((p1.indexof('/')>-1) || (p1.indexof('>')>-1) || (p1.indexof('<')>-1) || (p1.indexof('&')>-1) || (p1.indexof('\"')>-1) ){
+		alert("Invalid character in password");
+		document.forms["RegisterForm"].elements["userpass"].focus();
+		return;
+	}
+	*/
+	if( (p2 == null) || (p2 =="") ){
+		alert("Confirm password cannot be null");
+		document.forms["RegisterForm"].elements["confirmpass"].focus();
+		return;
+		
+	}
+	/*
+	if ((p2.indexof('/')>-1) || (p2.indexof('>')>-1) || (p2.indexof('<')>-1) || (p2.indexof('&')>-1) || (p2.indexof('\"')>-1) ){
+		alert("Invalid character in confirm password");
+		document.forms["RegisterForm"].elements["confirmpass"].focus();
+		return;
+	}
+	*/
 	
 	if( p1 != p2){		
 		alert("Password fields must match");
 		document.forms["RegisterForm"].elements["userpass"].focus();
 		return;			
 	}
+	
 	document.RegisterForm.method ="post";
 	document.RegisterForm.submit();
+	
+}
+
+function checkEnter(){
+	var nKeyCode = window.event.keyCode;
+	
+	//Check for enter key
+	if (nKeyCode == 13)
+		selectedValues();
 	
 }
 </script>

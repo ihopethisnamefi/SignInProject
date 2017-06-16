@@ -17,8 +17,8 @@ public class RegisterDao {
         String url = "jdbc:mysql://localhost:3306/";
         String dbName = "test";
         String driver = "com.mysql.jdbc.Driver";
-        String userName = ""; //Note: removed user/password from public view
-        String password = "";
+        String userName = "root"; 
+        String password = "root";
    
         
         try {
