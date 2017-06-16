@@ -53,24 +53,27 @@ public class RegistrationServlet extends HttpServlet {
         if(session!=null)
         session.setAttribute("name", n);
  */
-        if(CheckUsernameDao.validate(n)){  
-        	out.print("<p style=\"color:red\">Sorry username already exists.</p>"); 
-        	RequestDispatcher rd=request.getRequestDispatcher("register.jsp");
-            rd.include(request,response);
-        } 
-        else if(XSSDetected){
+    
+        if(XSSDetected){
         	out.print("<p style=\"color:red\">Due to the possibility of XSS, do not use the following characters: &, <,>,\",/</p>"); 
         	RequestDispatcher rd=request.getRequestDispatcher("register.jsp");  
-            rd.include(request,response);        
+            rd.include(request,response);  
         }
-        else{  
-            RegisterDao.insert(n,f,hash, salt);
-            out.print("<p style=\"color:red\">User has been created.</p>");
-            session.setAttribute("name", n);
-            request.setAttribute("register", "true");
-        	RequestDispatcher rd=request.getRequestDispatcher("welcome.jsp");  
-        	rd.forward(request,response);
-        }  
+        else{
+            if(CheckUsernameDao.validate(n)){  
+            	out.print("<p style=\"color:red\">Sorry username already exists.</p>"); 
+            	RequestDispatcher rd=request.getRequestDispatcher("register.jsp");
+                rd.include(request,response);
+            } 
+            else{  
+                RegisterDao.insert(n,f,hash, salt);
+                out.print("<p style=\"color:red\">User has been created.</p>");
+                session.setAttribute("name", n);
+                request.setAttribute("register", "true");
+            	RequestDispatcher rd=request.getRequestDispatcher("welcome.jsp");  
+            	rd.forward(request,response);
+            }         	    
+        }
 
         out.close();  
     }  

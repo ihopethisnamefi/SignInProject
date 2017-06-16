@@ -41,31 +41,35 @@ public class LoginServlet extends HttpServlet{
         if(session!=null)
         session.setAttribute("name", n);
  */
-        if(CheckUsernameDao.validate(n)){
-	        if(Authentication.authenticate(n, p)){  
-	            if(session!=null){
-	                session.setAttribute("name", n);
-	                request.setAttribute("register", "false");
-	            	RequestDispatcher rd=request.getRequestDispatcher("welcome.jsp");  
-	            	rd.forward(request,response); 
-	        	}
-	        } 
-	        else if(XSSDetected){
-	        	out.print("<p style=\"color:red\">Due to the possibility of XSS, do not use the following characters: &, <,>,\",/</p>"); 
-	        	RequestDispatcher rd=request.getRequestDispatcher("index.jsp");  
-	            rd.include(request,response);        
-	        }
-	        else{  
-	            out.print("<p style=\"color:red\">Sorry username or password error</p>");
-	            RequestDispatcher rd=request.getRequestDispatcher("index.jsp");  
-	            rd.include(request,response);  
-	        }  
+        if(XSSDetected){
+        	out.print("<p style=\"color:red\">Due to the possibility of XSS, do not use the following characters: &, <,>,\",/</p>"); 
+        	RequestDispatcher rd=request.getRequestDispatcher("index.jsp");  
+            rd.include(request,response);        
         }
         else{
-            out.print("<p style=\"color:red\">Username does not exist! Please register</p>");
-            RequestDispatcher rd=request.getRequestDispatcher("index.jsp");  
-            rd.include(request,response);         	
+            if(CheckUsernameDao.validate(n)){
+    	        if(Authentication.authenticate(n, p)){  
+    	            if(session!=null){
+    	                session.setAttribute("name", n);
+    	                request.setAttribute("register", "false");
+    	            	RequestDispatcher rd=request.getRequestDispatcher("welcome.jsp");  
+    	            	rd.forward(request,response); 
+    	        	}
+    	        } 
+    	        else{  
+    	            out.print("<p style=\"color:red\">Sorry username or password error</p>");
+    	            RequestDispatcher rd=request.getRequestDispatcher("index.jsp");  
+    	            rd.include(request,response);  
+    	        }  
+            }
+            else{
+                out.print("<p style=\"color:red\">Username does not exist! Please register</p>");
+                RequestDispatcher rd=request.getRequestDispatcher("index.jsp");  
+                rd.include(request,response);         	
+            }
+        	       	
         }
+        
         out.close();  
     }  
 } 
